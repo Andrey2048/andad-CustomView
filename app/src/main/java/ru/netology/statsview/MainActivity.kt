@@ -18,6 +18,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
                     500F,
                     500F,
                 )
-            },2000)
+            }, 500
+        )
     }
 }
