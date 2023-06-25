@@ -1,6 +1,7 @@
 package ru.netology.statsview
 
 import android.os.Bundle
+import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import ru.netology.statsview.ui.StatsView
 
@@ -10,6 +11,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         super.onCreate(savedInstanceState)
 
         val view = findViewById<StatsView>(R.id.statsView)
+        val repeatButton = findViewById<Button>(R.id.repeat)
         view.postDelayed(
             {
                 view.data = listOf(
@@ -20,5 +22,9 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
                 )
             }, 500
         )
+        repeatButton.setOnClickListener {
+            view.update()
+        }
     }
+
 }

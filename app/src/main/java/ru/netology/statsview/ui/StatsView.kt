@@ -30,7 +30,10 @@ class StatsView @JvmOverloads constructor(
     private var colors = emptyList<Int>()
 
     private var progress = 0F
+    private var progressRotation = 0F
     private var valueAnimator: ValueAnimator? = null
+    private var valueAnimatorRotation: ValueAnimator? = null
+    private val animDuraution = 2000L
 
     init {
         context.withStyledAttributes(attrs, R.styleable.StatsView) {
@@ -56,7 +59,6 @@ class StatsView @JvmOverloads constructor(
     var data: List<Float> = emptyList()
         set(value) {
             field = value
-//            invalidate()
             update()
         }
 
@@ -80,12 +82,13 @@ class StatsView @JvmOverloads constructor(
         for ((index, datum) in data.withIndex()) {
             val angle = 360F * datum / sumOfData
             paint.color = colors.getOrNull(index) ?: randomColor()
-            canvas.drawArc(oval, startFrom, angle * progress, false, paint)
+            canvas.drawArc(oval, startFrom + progressRotation, angle * progress, false, paint)
             startFrom += angle
         }
 
 
-                canvas.drawPoint(center.x, center.y-radius, paint.apply { color = colors[0] })
+//        canvas.drawPoint(center.x, center.y - radius, paint.apply { color = colors[0] })
+
 
         canvas.drawText(
             "%.2f%%".format((data.sum() / sumOfData) * 100),
@@ -96,23 +99,41 @@ class StatsView @JvmOverloads constructor(
 
     }
 
-    private fun update() {
+    fun update() {
         valueAnimator?.let {
             it.removeAllListeners()
             it.cancel()
         }
+        valueAnimatorRotation?.let {
+            it.removeAllListeners()
+            it.cancel()
+        }
         progress = 0F
+        progressRotation = 0F
 
         valueAnimator = ValueAnimator.ofFloat(0F, 1F).apply {
             addUpdateListener { anim ->
                 progress = anim.animatedValue as Float
                 invalidate()
             }
-            duration = 1000
+            duration = animDuraution
             interpolator = LinearInterpolator()
         }.also {
             it.start()
         }
+
+        valueAnimatorRotation = ValueAnimator.ofFloat(0F, 360F).apply {
+            addUpdateListener { anim ->
+                progressRotation = anim.animatedValue as Float
+                invalidate()
+            }
+            duration = animDuraution
+            interpolator = LinearInterpolator()
+        }.also {
+            it.start()
+        }
+
+
     }
 
     private fun randomColor() = Random.nextInt(0xFF000000.toInt(), 0xFFFFFFFF.toInt())

@@ -21,4 +21,12 @@
         app:colors="@array/colors"
         app:lineWidth="20dp" />
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/repeat"
+        android:text="@string/repeat"
+        android:layout_gravity="center_horizontal|bottom"
+        android:layout_marginBottom="@dimen/margin_default"/>
+
 </FrameLayout>
